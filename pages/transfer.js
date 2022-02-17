@@ -1,38 +1,28 @@
+import Navbar from "src/components/navbar";
 import {
-  Flex,
   Box,
+  Flex,
   FormControl,
   FormLabel,
   Input,
-  Checkbox,
   Stack,
-  Link,
   Button,
   Heading,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-
-export default function Login() {
-  const router = useRouter();
-  const handleLogin = () => {
-    router.push("/transfer");
-  };
+export default function Home() {
   return (
-    <Flex
-      minH={"100vh"}
-      align={"center"}
-      justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
-    >
+    <Box>
+      <Navbar />
+
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={12}>
-        <Stack align={"center"}>
+        <Stack>
           <Heading color={"blue.400"} fontSize={"4xl"}>
-            Zenmo
+            Send funds
           </Heading>
           <Text fontSize={"lg"} color={"gray.600"}>
-            Send money with ease!
+            Be careful!
           </Text>
         </Stack>
         <Box
@@ -43,37 +33,32 @@ export default function Login() {
         >
           <Stack spacing={4}>
             <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <FormLabel>Recipient</FormLabel>
+              <Input />
             </FormControl>
             <FormControl id="password">
-              <FormLabel>Password</FormLabel>
-              <Input type="password" />
+              <FormLabel>Amount</FormLabel>
+              <Input />
             </FormControl>
             <Stack spacing={10}>
               <Stack
                 direction={{ base: "column", sm: "row" }}
                 align={"start"}
                 justify={"space-between"}
-              >
-                {/* <Checkbox>Remember me</Checkbox>
-                <Link color={"blue.400"}>Forgot password?</Link> */}
-              </Stack>
-
+              ></Stack>
               <Button
-                onClick={handleLogin}
-                bg={"blue.400"}
+                bg={"green.400"}
                 color={"white"}
                 _hover={{
-                  bg: "blue.500",
+                  bg: "green.500",
                 }}
               >
-                Log In
+                Send
               </Button>
             </Stack>
           </Stack>
         </Box>
       </Stack>
-    </Flex>
+    </Box>
   );
 }
