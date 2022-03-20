@@ -40,9 +40,8 @@ export default function CallToActionWithAnnotation() {
             </Text>
           </Heading>
           <Text color={"gray.500"}>
-            Monetize your content by charging your most loyal readers and reward
-            them loyalty points. Give back to your loyal readers by granting
-            them access to your pre-releases and sneak-peaks.
+            Zenmo is a demo app to introduce some web security fundamentals for
+            class CSE 437S: Software Engineering Workshop.
           </Text>
           <Stack
             direction={"column"}

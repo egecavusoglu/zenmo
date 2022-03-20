@@ -21,8 +21,8 @@ Zenmo is a demo app to introduce some web security fundamentals for class CSE 43
 
 ## Roadmap
 
-- [] Build the UI for the pages.
-- [] Set SQL db for
+- [x] Build the UI for the pages.
+- [x] Set SQL db with prisma
 - [] Add login with email to track which students were in.
 - [] Develop vulnerabilities in the context of the app.
 - []
