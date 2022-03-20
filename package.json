@@ -6,13 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prebuild": "npx prisma generate",
+    "prisma-update": "npx prisma db push && npx prisma generate",
+    "prisma-ui": "npx prisma studio"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.5",
     "@chakra-ui/react": "^1.8.3",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@prisma/client": "3.11.0",
     "framer-motion": "^6",
     "next": "12.1.0",
     "react": "17.0.2",
@@ -20,6 +24,7 @@
   },
   "devDependencies": {
     "eslint": "8.9.0",
-    "eslint-config-next": "12.1.0"
+    "eslint-config-next": "12.1.0",
+    "prisma": "3.11.0"
   }
 }

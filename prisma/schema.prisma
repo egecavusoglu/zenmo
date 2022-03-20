@@ -9,3 +9,25 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// User mode, each student is a user
+model User {
+  id    Int     @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email String  @unique
+  balance Float
+  tasks Task[]
+}
+
+// Used to track which users completed which tasks for the assignment
+model Task {
+  vulnerability Vulnerabilities
+  user User @relation(fields: [userId], references: [id])
+  userId Int 
+  @@id([vulnerability, userId])
+}
+
+enum Vulnerabilities {
+  MALFORMED_REQUEST
+  XSS_ATTACK
+}
