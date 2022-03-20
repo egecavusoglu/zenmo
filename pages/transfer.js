@@ -33,7 +33,7 @@ export default function Home() {
         >
           <Stack spacing={4}>
             <FormControl id="email">
-              <FormLabel>Recipient</FormLabel>
+              <FormLabel>Recipient Email Address</FormLabel>
               <Input />
             </FormControl>
             <FormControl id="password">
