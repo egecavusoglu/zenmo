@@ -19,6 +19,9 @@ export default function Login() {
   const toast = useToast();
   const router = useRouter();
   const [email, setEmail] = useState();
+  const username = email?.match(/^([^@]*)@/)
+    ? email?.match(/^([^@]*)@/)[1]
+    : email;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -71,6 +74,10 @@ export default function Login() {
                   This is how we determine if you completed the assignment,
                   please put your real email to receive credit.
                 </Text>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Your username</FormLabel>
+                <Input isDisabled value={username} />
               </FormControl>
               <Stack spacing={10}>
                 <Stack
