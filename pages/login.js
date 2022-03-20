@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { postRequest } from "src/lib/fetch";
 
 export default function Login() {
   const toast = useToast();
@@ -23,7 +24,7 @@ export default function Login() {
     ? email?.match(/^([^@]*)@/)[1]
     : email;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email.includes("@wustl.edu")) {
@@ -36,7 +37,16 @@ export default function Login() {
       });
       return;
     }
-    router.push("/transfer");
+
+    const response = await postRequest({
+      url: "/api/login",
+      body: {
+        email,
+      },
+    });
+    if (response?.isSuccess) {
+      router.push("/transfer");
+    }
   };
   return (
     <Flex

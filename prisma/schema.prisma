@@ -16,7 +16,7 @@ model User {
   createdAt DateTime @default(now())
   email String  @unique
   username String @unique
-  balance Float
+  balance Float @default(0)
   tasks Task[]
 }
 
