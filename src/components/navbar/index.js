@@ -29,6 +29,10 @@ const Links = [
     label: "Profile",
     route: "/profile",
   },
+  {
+    label: "Charts",
+    route: "/charts",
+  },
   // "Transactions"
 ];
 

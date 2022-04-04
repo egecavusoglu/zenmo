@@ -17,7 +17,6 @@ model User {
   email String  @unique
   username String @unique
   balance Float @default(0)
-  api_key String
   tasks Task[]
 }
 
