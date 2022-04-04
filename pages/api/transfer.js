@@ -27,28 +27,6 @@ export default async function handler(req, res) {
 
     const parsedAmount = parseFloat(amount);
 
-    // const [fromUser, toUser] = await prisma.$transaction([
-    //   prisma.user.update({
-    //     where: {
-    //       username: from,
-    //     },
-    //     data: {
-    //       balance: {
-    //         decrement: parsedAmount,
-    //       },
-    //     },
-    //   }),
-    //   prisma.user.update({
-    //     where: {
-    //       username: to,
-    //     },
-    //     data: {
-    //       balance: {
-    //         increment: parsedAmount,
-    //       },
-    //     },
-    //   }),
-    // ]);
     let toUser;
     let fromUser;
     await prisma.$transaction(async (prisma) => {
