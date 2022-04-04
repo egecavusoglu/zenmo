@@ -15,8 +15,10 @@ import {
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { postRequest } from "src/lib/fetch";
+import { useAuthStore } from "src/store";
 
 export default function Login() {
+  const setUser = useAuthStore((s) => s.logIn);
   const toast = useToast();
   const router = useRouter();
   const [email, setEmail] = useState();
@@ -45,6 +47,7 @@ export default function Login() {
       },
     });
     if (response?.isSuccess) {
+      setUser(response?.user); // set global state
       router.push("/transfer");
     }
   };

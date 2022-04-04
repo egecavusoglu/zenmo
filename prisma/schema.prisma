@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 datasource db {
@@ -10,7 +11,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User mode, each student is a user
+// User model, each student is a user
 model User {
   id    Int     @id @default(autoincrement())
   createdAt DateTime @default(now())

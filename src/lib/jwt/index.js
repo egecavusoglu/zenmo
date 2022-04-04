@@ -10,8 +10,8 @@ const JWT_TOKEN_SECRET = process.env.TOKEN_SECRET;
  * @param {*} userId
  * @returns User ID encrypted JWT token
  */
-function generateAccessToken(userId, userEmail) {
-  return jwt.sign({ id: userId, email: userEmail }, JWT_TOKEN_SECRET, {
+function generateAccessToken(userId, username) {
+  return jwt.sign({ id: userId, username: username }, JWT_TOKEN_SECRET, {
     expiresIn: "7d",
   });
 }
