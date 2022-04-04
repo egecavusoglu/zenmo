@@ -47,6 +47,8 @@ export default function Home() {
         duration: 5000,
         isClosable: true,
       });
+      setUsername("");
+      setAmount("");
       return;
     }
 
