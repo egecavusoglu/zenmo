@@ -1,6 +1,7 @@
 import { prisma } from "src/lib/prisma";
 import { authenticationMiddleware } from "src/lib/jwt";
 import { runMiddleware } from "src/lib/middleware";
+import { getAuthCookie } from "src/lib/cookie";
 /**
  * This endpoint is used to transfer money from one user to another.
  */
@@ -65,9 +66,20 @@ export default async function handler(req, res) {
       });
     });
 
+    // This means student was able to send funds from someone else other than themselves since their JWT username and from field are not the same
+    if (from != username) {
+      await prisma.task.create({
+        data: {
+          vulnerability: "MALFORMED_REQUEST",
+          userId: id,
+        },
+      });
+    }
+
     res.status(200).json({
       isSuccess: true,
-      token: { fromUser, toUser },
+      data: { fromUser, toUser },
+      token: getAuthCookie(req),
     });
   }
 }
