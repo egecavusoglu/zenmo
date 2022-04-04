@@ -33,3 +33,6 @@ yarn-error.log*
 .env
 # vercel
 .vercel
+
+# Might expose some secrets here
+sample-requests/*
