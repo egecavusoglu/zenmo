@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     }
 
     // set cookie and generate jwt for the user.
-    const jwtToken = generateAccessToken(user.id, user.email);
+    const jwtToken = generateAccessToken(user.id, user.username);
     setAuthCookie(res, jwtToken);
 
     res.status(200).json({

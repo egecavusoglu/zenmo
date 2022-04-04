@@ -9,7 +9,8 @@
     "lint": "next lint",
     "prebuild": "npx prisma generate",
     "prisma-update": "npx prisma db push && npx prisma generate",
-    "prisma-ui": "npx prisma studio"
+    "prisma-ui": "npx prisma studio",
+    "pull-env": "vercel env pull"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.5",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "eslint": "8.9.0",
     "eslint-config-next": "12.1.0",
-    "prisma": "3.11.0"
+    "prisma": "3.11.0",
+    "vercel": "^24.0.1"
   }
 }
