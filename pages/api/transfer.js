@@ -9,7 +9,6 @@ export default async function handler(req, res) {
   if (req.method == "POST") {
     await runMiddleware(req, res, authenticationMiddleware);
     const { id, username } = req.user;
-
     const { from, to, amount } = req.body;
 
     if (!from || !to) {
@@ -28,8 +27,44 @@ export default async function handler(req, res) {
 
     const parsedAmount = parseFloat(amount);
 
-    const [fromUser, toUser] = await prisma.$transaction([
-      prisma.user.update({
+    // const [fromUser, toUser] = await prisma.$transaction([
+    //   prisma.user.update({
+    //     where: {
+    //       username: from,
+    //     },
+    //     data: {
+    //       balance: {
+    //         decrement: parsedAmount,
+    //       },
+    //     },
+    //   }),
+    //   prisma.user.update({
+    //     where: {
+    //       username: to,
+    //     },
+    //     data: {
+    //       balance: {
+    //         increment: parsedAmount,
+    //       },
+    //     },
+    //   }),
+    // ]);
+    let toUser;
+    let fromUser;
+    await prisma.$transaction(async (prisma) => {
+      const fromDbUser = await prisma.user.findUnique({
+        where: {
+          username: from,
+        },
+      });
+
+      if (fromDbUser.balance < parsedAmount) {
+        throw new Error(
+          `${from} does not have ${parsedAmount} amount of funds to transfer!`
+        );
+      }
+
+      fromUser = await prisma.user.update({
         where: {
           username: from,
         },
@@ -38,8 +73,9 @@ export default async function handler(req, res) {
             decrement: parsedAmount,
           },
         },
-      }),
-      prisma.user.update({
+      });
+
+      toUser = await prisma.user.update({
         where: {
           username: to,
         },
@@ -48,8 +84,8 @@ export default async function handler(req, res) {
             increment: parsedAmount,
           },
         },
-      }),
-    ]);
+      });
+    });
 
     res.status(200).json({
       isSuccess: true,
