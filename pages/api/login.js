@@ -1,7 +1,6 @@
 import { setAuthCookie } from "src/lib/cookie";
 import { generateAccessToken } from "src/lib/jwt";
 import { prisma } from "src/lib/prisma";
-import { crypto } from "crypto";
 
 export default async function handler(req, res) {
   if (req.method == "POST") {
@@ -20,8 +19,7 @@ export default async function handler(req, res) {
         data: {
           email: email,
           username: email?.match(/^([^@]*)@/)[1],
-          balance: 100,
-          api_key: crypto.randomBytes(16).toString("hex"),
+          balance: 100
         },
       });
     }
