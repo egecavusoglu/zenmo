@@ -19,6 +19,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Container,
 } from "@chakra-ui/react";
 import { getRequest, postRequest } from "src/lib/fetch";
 import React, { useState, useEffect } from "react";
@@ -51,49 +52,75 @@ export default function Charts() {
   return (
     <Box>
       <Navbar />
-      <Center py={6}>
-        <StatGroup>
-          <Stat>
-            <StatLabel>Zenmo Stock Price</StatLabel>
-            <StatNumber>{stockPrice}</StatNumber>
-            <StatHelpText>
-              <StatArrow type="increase" />
-              33.00%
-            </StatHelpText>
-          </Stat>
-        </StatGroup>
 
-        <p>I heard that someone forgot to lock down the controls on the API key to fetch the stock data. Can you get it for me? It would sure save us a lot of money :)</p>
+      <Container maxW={"3xl"}>
+        <Stack
+          as={Box}
+          textAlign={"center"}
+          spacing={{ base: 8, md: 14 }}
+          py={{ base: 20, md: 36 }}
+        >
+          <Stack>
+            <StatGroup>
+              <Stat>
+                <StatLabel>Zenmo Stock Price</StatLabel>
+                <StatNumber>{stockPrice}</StatNumber>
+                <StatHelpText>
+                  <StatArrow type="increase" />
+                  33.00%
+                </StatHelpText>
+              </Stat>
+            </StatGroup>
+          </Stack>
 
-      
-        <Box>
-          <form onSubmit={handleVerify}>
-            <FormControl id="api_key" isRequired>
-              <FormLabel>API Key</FormLabel>
-              <Input
-                placeholder="api key"
-                value={key}
-                onChange={(e) => setKey(e.target.value)}
-              />
-            </FormControl>
+          <Box>
+            <p>
+              I heard that someone forgot to lock down the controls on the API
+              key to fetch the stock data. Can you get it for me? It would sure
+              save us a lot of money :)
+            </p>
+          </Box>
 
-            <Stack spacing={4}>
-              <Stack spacing={10}>
-                <Button
-                  type="submit"
-                  bg={"green.400"}
-                  color={"white"}
-                  _hover={{
-                    bg: "green.500",
-                  }}
-                >
-                  Send
-                </Button>
+          <Box
+            rounded={"lg"}
+            bg={useColorModeValue("white", "gray.700")}
+            boxShadow={"lg"}
+            p={8}
+          >
+            <form onSubmit={handleVerify}>
+              <Stack spacing={4}>
+                <FormControl id="api_key" isRequired>
+                  <FormLabel>API Key</FormLabel>
+                  <Input
+                    placeholder="Api Key"
+                    value={key}
+                    onChange={(e) => setKey(e.target.value)}
+                  />
+                </FormControl>
+
+                <Stack spacing={10}>
+                  <Stack
+                    direction={{ base: "column", sm: "row" }}
+                    align={"start"}
+                    justify={"space-between"}
+                  >
+                    <Button
+                      type="submit"
+                      bg={"green.400"}
+                      color={"white"}
+                      _hover={{
+                        bg: "green.500",
+                      }}
+                    >
+                      Send
+                    </Button>
+                  </Stack>
+                </Stack>
               </Stack>
-            </Stack>
-          </form>
-        </Box>
-      </Center>
+            </form>
+          </Box>
+        </Stack>
+      </Container>
     </Box>
   );
 }
