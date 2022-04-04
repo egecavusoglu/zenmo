@@ -48,7 +48,6 @@ export default function Home() {
         isClosable: true,
       });
       setUsername("");
-      setAmount("");
       return;
     }
 
