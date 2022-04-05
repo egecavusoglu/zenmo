@@ -10,12 +10,15 @@ import {
   Stack,
   Button,
   useColorModeValue,
+  Spinner,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useProfile } from "src/lib/requests/profile";
 
 export default function Profile({ ...props }) {
   const router = useRouter();
   const { userId } = router.query;
+  const { user, loading, error } = useProfile(userId);
 
   return (
     <Box>
@@ -40,9 +43,7 @@ export default function Profile({ ...props }) {
           <Flex justify={"center"} mt={-12}>
             <Avatar
               size={"xl"}
-              src={
-                "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-              }
+              // src={}
               alt={"Author"}
               css={{
                 border: "2px solid white",
@@ -51,41 +52,32 @@ export default function Profile({ ...props }) {
           </Flex>
 
           <Box p={6}>
-            <Stack spacing={0} align={"center"} mb={5}>
-              <Heading fontSize={"2xl"} fontWeight={500} fontFamily={"body"}>
-                John Doe
-              </Heading>
-              <Text color={"gray.500"}>Confidential Info here!</Text>
-            </Stack>
-
-            <Stack direction={"row"} justify={"center"} spacing={6}>
-              <Stack spacing={0} align={"center"}>
-                <Text fontWeight={600}>$12.20</Text>
-                <Text fontSize={"sm"} color={"gray.500"}>
-                  Balance
-                </Text>
-              </Stack>
-              {/* <Stack spacing={0} align={"center"}>
-                <Text fontWeight={600}>23k</Text>
-                <Text fontSize={"sm"} color={"gray.500"}>
-                  Followers
-                </Text>
-              </Stack> */}
-            </Stack>
-
-            <Button
-              w={"full"}
-              mt={8}
-              bg={"blue.500"}
-              color={"white"}
-              rounded={"md"}
-              _hover={{
-                transform: "translateY(-2px)",
-                boxShadow: "lg",
-              }}
-            >
-              Do Something
-            </Button>
+            {loading ? (
+              <Center>
+                <Spinner />
+              </Center>
+            ) : (
+              <>
+                <Stack spacing={0} align={"center"} mb={5}>
+                  <Heading
+                    fontSize={"2xl"}
+                    fontWeight={500}
+                    fontFamily={"body"}
+                  >
+                    {user?.username}
+                  </Heading>
+                  <Text color={"gray.500"}>{user?.email}</Text>
+                </Stack>
+                <Stack direction={"row"} justify={"center"} spacing={6}>
+                  <Stack spacing={0} align={"center"}>
+                    <Text fontWeight={600}>${user?.balance?.toFixed(2)}</Text>
+                    <Text fontSize={"sm"} color={"gray.500"}>
+                      Balance
+                    </Text>
+                  </Stack>
+                </Stack>{" "}
+              </>
+            )}
           </Box>
         </Box>
       </Center>
