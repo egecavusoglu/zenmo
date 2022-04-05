@@ -16,11 +16,11 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { postRequest } from "src/lib/fetch";
-import { useProfile } from "src/lib/requests/profile";
+import { useToken } from "src/lib/requests/profile";
 
 export default function Home() {
   const toast = useToast();
-  const profile = useProfile();
+  const profile = useToken();
   const user = profile?.user;
   const [username, setUsername] = useState("");
   const [amount, setAmount] = useState();

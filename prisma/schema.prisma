@@ -33,4 +33,5 @@ enum Vulnerabilities {
   MALFORMED_REQUEST
   XSS_ATTACK
   EXPOSE_KEY
+  UNPROTECTED_ROUTE
 }
