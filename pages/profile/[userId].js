@@ -11,8 +11,12 @@ import {
   Button,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 export default function Profile({ ...props }) {
+  const router = useRouter();
+  const { userId } = router.query;
+
   return (
     <Box>
       <Navbar />
