@@ -22,6 +22,7 @@ export default function Login() {
   const toast = useToast();
   const router = useRouter();
   const [email, setEmail] = useState();
+  const [loading, setLoading] = useState(false);
   const username = email?.match(/^([^@]*)@/)
     ? email?.match(/^([^@]*)@/)[1]
     : email;
@@ -39,13 +40,14 @@ export default function Login() {
       });
       return;
     }
-
+    setLoading(true);
     const response = await postRequest({
       url: "/api/login",
       body: {
         email,
       },
     });
+    setLoading(false);
     if (response?.isSuccess) {
       setUser(response?.user); // set global state
       router.push("/transfer");
@@ -99,6 +101,7 @@ export default function Login() {
                   justify={"space-between"}
                 ></Stack>
                 <Button
+                  isLoading={loading}
                   type="submit"
                   bg={"blue.400"}
                   color={"white"}
