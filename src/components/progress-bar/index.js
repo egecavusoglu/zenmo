@@ -64,7 +64,7 @@ export default function ProgressBar({ ...props }) {
                 Your Progress %{progress?.percentFinished.toFixed(1)}
               </Text>
               {progress?.tasks.map((t) => (
-                <TaskItem task={t.vulnerability} />
+                <TaskItem key={t.vulnerability} task={t.vulnerability} />
               ))}
             </>
           ) : (

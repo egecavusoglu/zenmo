@@ -24,11 +24,11 @@ function authenticationMiddleware(req, res, next) {
   const header = getAuthCookie(req);
   const token = header && header.split(" ")[1];
   if (!token) {
-    return res.redirect("/welcome");
+    return res.redirect("/");
   }
   jwt.verify(token, JWT_TOKEN_SECRET, (err, user) => {
     if (err) {
-      return res.redirect("/welcome");
+      return res.redirect("/");
     }
     req.user = user;
     next();
