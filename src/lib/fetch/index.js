@@ -18,7 +18,12 @@ const unregister = fetchIntercept.register({
 
   response: function (response) {
     // Modify the response object
-
+    if (response.status == 401) {
+      useAuthStore.setState({
+        user: null,
+        isLoggedIn: false,
+      });
+    }
     if (response?.status == TASK_COMPLETED_STATUS) {
       // if a task was completed launch a toast.
       toast({

@@ -12,13 +12,13 @@ import { useState } from "react";
 import { useProgress } from "src/lib/requests/progress";
 import { Vulnerabilities } from "@prisma/client";
 import { useToken } from "src/lib/requests/profile";
+import { useAuthStore } from "src/store";
 
 const MARGIN = 12;
 export default function ProgressBar({ ...props }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const { progress } = useProgress();
-  const profile = useToken();
-  const user = profile?.user;
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
 
   return (
     <>
@@ -49,7 +49,7 @@ export default function ProgressBar({ ...props }) {
           borderRadius={10}
           p={4}
         >
-          {user ? (
+          {isLoggedIn ? (
             <>
               {" "}
               <Progress
