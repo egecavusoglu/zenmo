@@ -20,7 +20,7 @@ export function useProfile(userId) {
   if (data?.user) {
     useAuthStore.setState({
       user: data?.user,
-      isLoggedIn: false,
+      isLoggedIn: true,
     });
   }
   return {
