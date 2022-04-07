@@ -1,9 +1,24 @@
-import { Box, Button, Collapse, Progress } from "@chakra-ui/react";
+import { CheckCircleIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Collapse,
+  Progress,
+  Flex,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useState } from "react";
+import { useProgress } from "src/lib/requests/progress";
+import { Vulnerabilities } from "@prisma/client";
+import { useToken } from "src/lib/requests/profile";
 
 const MARGIN = 12;
 export default function ProgressBar({ ...props }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const { progress } = useProgress();
+  const profile = useToken();
+  const user = profile?.user;
 
   return (
     <>
@@ -26,7 +41,7 @@ export default function ProgressBar({ ...props }) {
           right={MARGIN}
           bottom={MARGIN}
           minW={360}
-          minH={180}
+          // minH={180}
           bg="white"
           borderColor={"gray.100"}
           borderWidth={3}
@@ -34,18 +49,53 @@ export default function ProgressBar({ ...props }) {
           borderRadius={10}
           p={4}
         >
-          <Progress
-            hasStripe
-            value={60}
-            colorScheme={"green"}
-            size="lg"
-            borderRadius={10}
-            mb={4}
-          />
-          <Button onClick={() => setIsCollapsed(true)}>Collapse</Button>
-          HEY
+          {user ? (
+            <>
+              {" "}
+              <Progress
+                hasStripe
+                value={progress?.percentFinished}
+                colorScheme={"green"}
+                size="lg"
+                borderRadius={10}
+                mb={4}
+              />
+              <Text mb={2} fontWeight={"medium"}>
+                Your Progress %{progress?.percentFinished.toFixed(1)}
+              </Text>
+              {progress?.tasks.map((t) => (
+                <TaskItem task={t.vulnerability} />
+              ))}
+            </>
+          ) : (
+            <Text>Log in to see progress</Text>
+          )}
+          <Flex
+            mt={8}
+            flex={1}
+            alignItems={"flex-end"}
+            justifyContent={"flex-end"}
+          >
+            <Button onClick={() => setIsCollapsed(true)}>Close</Button>
+          </Flex>
         </Box>
       </Collapse>
     </>
+  );
+}
+
+function TaskItem({ task }) {
+  const map = {
+    EXPOSE_KEY: "Exposed API Key",
+    MALFORMED_REQUEST: "Malformed Request",
+    XSS_ATTACK: "Malformed Request",
+    UNPROTECTED_ROUTE: "Unprotected Route",
+  };
+
+  return (
+    <Flex alignItems={"center"} mb={1}>
+      <CheckCircleIcon color={"green"} mr={2} />
+      <Text>{map[task]}</Text>
+    </Flex>
   );
 }

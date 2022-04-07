@@ -14,9 +14,10 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { postRequest } from "src/lib/fetch";
 import { useToken } from "src/lib/requests/profile";
+import { useProgress } from "src/lib/requests/progress";
 
 export default function Home() {
   const toast = useToast();
@@ -25,6 +26,11 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const [amount, setAmount] = useState();
   const [loading, setLoading] = useState(false);
+  const { mutator } = useProgress();
+
+  useEffect(() => {
+    mutator();
+  }, []);
 
   const handleTransferFunds = async (e) => {
     e.preventDefault();
