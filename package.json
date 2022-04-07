@@ -20,6 +20,7 @@
     "@emotion/styled": "^11",
     "@prisma/client": "3.11.0",
     "cookie": "^0.4.2",
+    "fetch-intercept": "^2.4.0",
     "framer-motion": "^6",
     "jsonwebtoken": "^8.5.1",
     "next": "12.1.0",

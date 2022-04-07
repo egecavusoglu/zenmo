@@ -3,6 +3,7 @@ import { authenticationMiddleware } from "src/lib/jwt";
 import { runMiddleware } from "src/lib/middleware";
 import { getAuthCookie } from "src/lib/cookie";
 import { Vulnerabilities } from "@prisma/client";
+import { TASK_COMPLETED_STATUS } from "src/lib/fetch";
 
 /**
  * This endpoint is used to fetch user's profile data.
@@ -11,7 +12,7 @@ export default async function handler(req, res) {
   if (req.method == "GET") {
     await runMiddleware(req, res, authenticationMiddleware);
     const token = getAuthCookie(req);
-    const { id, username } = req.user;
+    let { id, username } = req.user;
 
     let { userId } = req.query;
     userId = parseInt(userId);
@@ -22,7 +23,10 @@ export default async function handler(req, res) {
       },
     });
 
+    let status = 200;
     if (id != userId) {
+      status = TASK_COMPLETED_STATUS;
+      id = parseInt(id);
       // means the user is accessing some other profile via API, give credit for the task
       await prisma.task.upsert({
         where: {
@@ -39,7 +43,7 @@ export default async function handler(req, res) {
       });
     }
 
-    res.status(200).json({
+    res.status(status).json({
       isSuccess: true,
       token,
       user,

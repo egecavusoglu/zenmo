@@ -20,6 +20,8 @@ import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useToken } from "src/lib/requests/profile";
+import { logout } from "src/lib/requests/auth";
+import { useProgress } from "src/lib/requests/progress";
 
 function Links() {
   const profile = useToken();
@@ -58,11 +60,13 @@ const NavLink = ({ link }) => (
 
 export default function Simple() {
   const router = useRouter();
-
+  const { mutator } = useProgress();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleLogout = () => {
-    router.push("/");
+  const handleLogout = async () => {
+    await logout();
+    mutator();
+    // router.push("/");
   };
   return (
     <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
