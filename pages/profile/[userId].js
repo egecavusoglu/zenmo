@@ -63,8 +63,9 @@ export default function Profile({ ...props }) {
                     fontSize={"2xl"}
                     fontWeight={500}
                     fontFamily={"body"}
+                    dangerouslySetInnerHTML={{__html: user?.username}}
                   >
-                    {user?.username}
+                    
                   </Heading>
                   <Text color={"gray.500"}>{user?.email}</Text>
                 </Stack>
