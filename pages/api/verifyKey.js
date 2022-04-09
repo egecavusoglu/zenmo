@@ -1,6 +1,7 @@
 import { prisma } from "src/lib/prisma";
 import { runMiddleware } from "src/lib/middleware";
 import { authenticationMiddleware } from "src/lib/jwt";
+import { Vulnerabilities } from "@prisma/client";
 
 
 export default async function handler(req, res) {
@@ -17,17 +18,23 @@ export default async function handler(req, res) {
 
     
     if (!user) {
-      res.status(200).json({
+      res.status(400).json({
         isSuccess: false,
+        error: "no such user"
       });
     } 
     else if(api_key === "c32db451-3f3d-4055-9d0e-c5c5c8ebf96a"){
-
-      console.log(id); 
       
-      await prisma.task.create({
-        data: {
-          vulnerability: "EXPOSE_KEY",
+      await prisma.task.upsert({
+        where: {
+          vulnerability_userId: {
+            vulnerability: Vulnerabilities.EXPOSE_KEY,
+            userId: id
+          }
+        },
+        update: {},
+        create: {
+          vulnerability: Vulnerabilities.EXPOSE_KEY,
           userId: id,
         },
       });
@@ -36,8 +43,9 @@ export default async function handler(req, res) {
       });
     }
     else{
-      res.status(200).json({
+      res.status(400).json({
         isSuccess: false,
+        error: "invalid key"
       });
     }
 

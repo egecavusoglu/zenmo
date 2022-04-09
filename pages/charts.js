@@ -36,7 +36,7 @@ export default function Charts() {
   };
   useEffect(() => {
     getPrice();
-  });
+  }, []);
 
   const handleVerify = async (e) => {
     e.preventDefault();
@@ -61,8 +61,8 @@ export default function Charts() {
           py={{ base: 20, md: 36 }}
         >
           <Stack>
-            <StatGroup>
-              <Stat>
+            <StatGroup >
+              <Stat border={2}>
                 <StatLabel>Zenmo Stock Price</StatLabel>
                 <StatNumber>{stockPrice}</StatNumber>
                 <StatHelpText>
