@@ -19,22 +19,32 @@ import {
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import { useToken } from "src/lib/requests/profile";
+import { logout } from "src/lib/requests/auth";
+import { useProgress } from "src/lib/requests/progress";
 
-const Links = [
-  {
-    label: "Transfer",
-    route: "/transfer",
-  },
-  {
-    label: "Profile",
-    route: "/profile",
-  },
-  {
-    label: "Charts",
-    route: "/charts",
-  },
-  // "Transactions"
-];
+function Links() {
+  const profile = useToken();
+  const user = profile?.user;
+
+  const Links = [
+    {
+      label: "Transfer",
+      route: "/transfer",
+    },
+    {
+      label: "Profile",
+      route: `/profile/${user?.id}`,
+    },
+    {
+      label: "Charts",
+      route: "/charts",
+    },
+    // "Transactions"
+  ];
+
+  return Links.map((link) => <NavLink key={link.route} link={link} />);
+}
 
 const NavLink = ({ link }) => (
   <NextLink href={link.route}>
@@ -54,10 +64,13 @@ const NavLink = ({ link }) => (
 
 export default function Simple() {
   const router = useRouter();
+  const { mutator } = useProgress();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleLogout = () => {
-    router.push("/");
+  const handleLogout = async () => {
+    await logout();
+    mutator();
+    // router.push("/");
   };
   return (
     <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
@@ -76,9 +89,7 @@ export default function Simple() {
             </Text>
           </Box>
           <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
-            {Links.map((link) => (
-              <NavLink key={link.route} link={link} />
-            ))}
+            <Links />
           </HStack>
         </HStack>
         <Flex alignItems={"center"}>
@@ -100,9 +111,7 @@ export default function Simple() {
       {isOpen ? (
         <Box pb={4} display={{ md: "none" }}>
           <Stack as={"nav"} spacing={4}>
-            {Links.map((link) => (
-              <NavLink key={link.route} link={link} />
-            ))}
+            <Links />
           </Stack>
         </Box>
       ) : null}
