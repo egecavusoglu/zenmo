@@ -5,6 +5,11 @@ Zenmo is a demo app to introduce some web security fundamentals for class CSE 43
 ## Vulnerabilities
 
 1. Expose an API key, data leak in a form body that is submitted.
+   - Will expose a unique API key to each user that grants access to a fake price api
+   - In real world the same key would be exposed to every user 
+   - If not properly gated, users could steal this api key for their own project
+   - TODO: Expose api key in some front end page
+   - TODO: Create page to submit the exposed key and verify it matches the users key
 
 2. Malformed POST request.
 

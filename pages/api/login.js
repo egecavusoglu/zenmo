@@ -19,7 +19,7 @@ export default async function handler(req, res) {
         data: {
           email: email,
           username: email?.match(/^([^@]*)@/)[1],
-          balance: 100,
+          balance: 100
         },
       });
     }

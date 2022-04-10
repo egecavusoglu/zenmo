@@ -36,6 +36,10 @@ function Links() {
       label: "Profile",
       route: `/profile/${user?.id}`,
     },
+    {
+      label: "Charts",
+      route: "/charts",
+    },
     // "Transactions"
   ];
 
