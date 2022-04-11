@@ -94,7 +94,7 @@ export default function ProgressBar({ ...props }) {
                   <TaskItem
                     key={t}
                     task={task}
-                    completed={completedTaskKeys.includes(t)}
+                    completed={completedTaskKeys?.includes(t)}
                   />
                 );
               })}
