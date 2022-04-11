@@ -1,4 +1,4 @@
-import { CheckCircleIcon } from "@chakra-ui/icons";
+import { CheckCircleIcon, InfoOutlineIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -7,19 +7,36 @@ import {
   Flex,
   Text,
   VStack,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverHeader,
+  PopoverBody,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useProgress } from "src/lib/requests/progress";
-import { Vulnerabilities } from "@prisma/client";
-import { useToken } from "src/lib/requests/profile";
+
 import { useAuthStore } from "src/store";
 
 const MARGIN = 12;
+
+const TASKS = {
+  EXPOSE_KEY: { label: "Exposed API Key", hint: "" },
+  MALFORMED_REQUEST: {
+    label: "Malformed Request",
+    hint: "Inspect the network request sent when you send a transaction and see if you can",
+  },
+  XSS_ATTACK: { label: "Cross Site Scripting Attack (XSS)", hint: "" },
+  UNPROTECTED_ROUTE: { label: "Unprotected Route", hint: " " },
+};
+
 export default function ProgressBar({ ...props }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const { progress } = useProgress();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-
+  const completedTaskKeys = progress?.tasks.map((t) => t.vulnerability);
   return (
     <>
       <Collapse in={isCollapsed}>
@@ -40,7 +57,7 @@ export default function ProgressBar({ ...props }) {
           position={"absolute"}
           right={MARGIN}
           bottom={MARGIN}
-          minW={360}
+          minW={380}
           // minH={180}
           bg="white"
           borderColor={"gray.100"}
@@ -51,7 +68,6 @@ export default function ProgressBar({ ...props }) {
         >
           {isLoggedIn ? (
             <>
-              {" "}
               <Progress
                 hasStripe
                 value={progress?.percentFinished}
@@ -63,9 +79,15 @@ export default function ProgressBar({ ...props }) {
               <Text mb={2} fontWeight={"medium"}>
                 Your Progress %{progress?.percentFinished.toFixed(1)}
               </Text>
-              {progress?.tasks.map((t) => (
-                <TaskItem key={t.vulnerability} task={t.vulnerability} />
-              ))}
+              {Object.keys(TASKS).map((t) => {
+                const task = TASKS[t];
+                return (
+                  <TaskItem
+                    task={task}
+                    completed={completedTaskKeys.includes(t)}
+                  />
+                );
+              })}
             </>
           ) : (
             <Text>Log in to see progress</Text>
@@ -84,18 +106,22 @@ export default function ProgressBar({ ...props }) {
   );
 }
 
-function TaskItem({ task }) {
-  const map = {
-    EXPOSE_KEY: "Exposed API Key",
-    MALFORMED_REQUEST: "Malformed Request",
-    XSS_ATTACK: "Malformed Request",
-    UNPROTECTED_ROUTE: "Unprotected Route",
-  };
-
+function TaskItem({ task, completed = false }) {
   return (
     <Flex alignItems={"center"} mb={1}>
-      <CheckCircleIcon color={"green"} mr={2} />
-      <Text>{map[task]}</Text>
+      <CheckCircleIcon color={completed ? "green" : "gray.200"} mr={2} />
+      <Text mr={2}>{task.label}</Text>
+      <Popover>
+        <PopoverTrigger>
+          <InfoOutlineIcon cursor={"pointer"} color={"gray.500"} />
+        </PopoverTrigger>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverHeader>Hint</PopoverHeader>
+          <PopoverBody>{task?.hint}</PopoverBody>
+        </PopoverContent>
+      </Popover>
     </Flex>
   );
 }
