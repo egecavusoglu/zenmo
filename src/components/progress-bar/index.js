@@ -1,4 +1,4 @@
-import { CheckCircleIcon } from "@chakra-ui/icons";
+import { CheckCircleIcon, InfoOutlineIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -7,19 +7,45 @@ import {
   Flex,
   Text,
   VStack,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverHeader,
+  PopoverBody,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useProgress } from "src/lib/requests/progress";
-import { Vulnerabilities } from "@prisma/client";
-import { useToken } from "src/lib/requests/profile";
+
 import { useAuthStore } from "src/store";
 
 const MARGIN = 12;
+
+const TASKS = {
+  EXPOSE_KEY: {
+    label: "Exposed API Key",
+    hint: "When developing a website, we regularly need to access third party API's that require us to verify our identity. This is regularly done through 'API Keys' or tokens that are tied to us through hashing and are regularly rotated. It's important to keep these safe because they can relate directly to billing and personal data access. Using the inspector, see if you can find an exposed key through normal usage of this site.",
+  },
+  MALFORMED_REQUEST: {
+    label: "Malformed Request",
+    hint: "The internet is built on the idea of allowing users to retrieve and create information. In allowing users to create information, we as developers open ourselves up to data and inputs that we do not control. It is our responsibility to minimize our exposure and weaknesses to potentially nefarious users. A good starting point is limiting the information the user has the ability to modify/control. See if you can find an api end point on this website that affords the user more control over data than they should have. Once you've found it, go ahead and 'steal' some resources from another user... it's fake money anyway.",
+  },
+  XSS_ATTACK: {
+    label: "Cross Site Scripting Attack (XSS)",
+    hint: "Cross Site Scripting vulnerabilities are among the most serious on the web with outcomes resulting in stolen information or resources, hijacked sessions, user misdirection, ... the list goes on. These vulnerabilities occur when user controlled data is not properly sanitized and a nefarious user is able to execute code on another users browser through your site. The simplest form of this is to insert valid html into an unprotected user input box that modifies a field that is viewable by other users. See if you can come up with an html input on this site that would cause other users viewing your profile to receive up a popup alert warning them that they've been hacked.",
+  },
+  UNPROTECTED_ROUTE: {
+    label: "Unprotected Route",
+    hint: "Not all data is public data. See if you can gain access to someone else's personal information without using the standard UI of the site.",
+  },
+};
+
 export default function ProgressBar({ ...props }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const { progress } = useProgress();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-
+  const completedTaskKeys = progress?.tasks.map((t) => t.vulnerability);
   return (
     <>
       <Collapse in={isCollapsed}>
@@ -40,7 +66,7 @@ export default function ProgressBar({ ...props }) {
           position={"absolute"}
           right={MARGIN}
           bottom={MARGIN}
-          minW={360}
+          minW={380}
           // minH={180}
           bg="white"
           borderColor={"gray.100"}
@@ -51,7 +77,6 @@ export default function ProgressBar({ ...props }) {
         >
           {isLoggedIn ? (
             <>
-              {" "}
               <Progress
                 hasStripe
                 value={progress?.percentFinished}
@@ -63,9 +88,16 @@ export default function ProgressBar({ ...props }) {
               <Text mb={2} fontWeight={"medium"}>
                 Your Progress %{progress?.percentFinished.toFixed(1)}
               </Text>
-              {progress?.tasks.map((t) => (
-                <TaskItem key={t.vulnerability} task={t.vulnerability} />
-              ))}
+              {Object.keys(TASKS).map((t) => {
+                const task = TASKS[t];
+                return (
+                  <TaskItem
+                    key={t}
+                    task={task}
+                    completed={completedTaskKeys?.includes(t)}
+                  />
+                );
+              })}
             </>
           ) : (
             <Text>Log in to see progress</Text>
@@ -84,18 +116,22 @@ export default function ProgressBar({ ...props }) {
   );
 }
 
-function TaskItem({ task }) {
-  const map = {
-    EXPOSE_KEY: "Exposed API Key",
-    MALFORMED_REQUEST: "Malformed Request",
-    XSS_ATTACK: "Malformed Request",
-    UNPROTECTED_ROUTE: "Unprotected Route",
-  };
-
+function TaskItem({ task, completed = false }) {
   return (
     <Flex alignItems={"center"} mb={1}>
-      <CheckCircleIcon color={"green"} mr={2} />
-      <Text>{map[task]}</Text>
+      <CheckCircleIcon color={completed ? "green" : "gray.200"} mr={2} />
+      <Text mr={2}>{task.label}</Text>
+      <Popover>
+        <PopoverTrigger>
+          <InfoOutlineIcon cursor={"pointer"} color={"gray.500"} />
+        </PopoverTrigger>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverHeader>Hint</PopoverHeader>
+          <PopoverBody>{task?.hint}</PopoverBody>
+        </PopoverContent>
+      </Popover>
     </Flex>
   );
 }
