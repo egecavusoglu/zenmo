@@ -23,13 +23,22 @@ import { useAuthStore } from "src/store";
 const MARGIN = 12;
 
 const TASKS = {
-  EXPOSE_KEY: { label: "Exposed API Key", hint: "" },
+  EXPOSE_KEY: {
+    label: "Exposed API Key",
+    hint: "When developing a website, we regularly need to access third party API's that require us to verify our identity. This is regularly done through 'API Keys' or tokens that are tied to us through hashing and are regularly rotated. It's important to keep these safe because they can relate directly to billing and personal data access. Using the inspector, see if you can find an exposed key through normal usage of this site.",
+  },
   MALFORMED_REQUEST: {
     label: "Malformed Request",
-    hint: "Inspect the network request sent when you send a transaction and see if you can",
+    hint: "The internet is built on the idea of allowing users to retrieve and create information. In allowing users to create information, we as developers open ourselves up to data and inputs that we do not control. It is our responsibility to minimize our exposure and weaknesses to potentially nefarious users. A good starting point is limiting the information the user has the ability to modify/control. See if you can find an api end point on this website that affords the user more control over data than they should have. Once you've found it, go ahead and 'steal' some resources from another user... it's fake money anyway.",
   },
-  XSS_ATTACK: { label: "Cross Site Scripting Attack (XSS)", hint: "" },
-  UNPROTECTED_ROUTE: { label: "Unprotected Route", hint: " " },
+  XSS_ATTACK: {
+    label: "Cross Site Scripting Attack (XSS)",
+    hint: "Cross Site Scripting vulnerabilities are among the most serious on the web with outcomes resulting in stolen information or resources, hijacked sessions, user misdirection, ... the list goes on. These vulnerabilities occur when user controlled data is not properly sanitized and a nefarious user is able to execute code on another users browser through your site. The simplest form of this is to insert valid html into an unprotected user input box that modifies a field that is viewable by other users. See if you can come up with an html input on this site that would cause other users viewing your profile to receive up a popup alert warning them that they've been hacked.",
+  },
+  UNPROTECTED_ROUTE: {
+    label: "Unprotected Route",
+    hint: "Not all data is public data. See if you can gain access to someone else's personal information without using the standard UI of the site.",
+  },
 };
 
 export default function ProgressBar({ ...props }) {
@@ -83,6 +92,7 @@ export default function ProgressBar({ ...props }) {
                 const task = TASKS[t];
                 return (
                   <TaskItem
+                    key={t}
                     task={task}
                     completed={completedTaskKeys.includes(t)}
                   />
