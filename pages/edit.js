@@ -12,14 +12,49 @@ import {
   AvatarBadge,
   IconButton,
   Center,
+  useToast,
+  Box,
 } from "@chakra-ui/react";
+import Navbar from "src/components/navbar";
+import { useState } from "react";
+import { postRequest } from "src/lib/fetch";
 
 export default function UserProfileEdit() {
+  const toast = useToast();
+  const [username, setUsername] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("a");
+    const response = await postRequest({
+      url: "/api/edit",
+      body: {
+        new_username: username,
+      },
+    });
+
+    if (response?.isSuccess) {
+      toast({
+        title: "Changed!",
+        description: "Your username was updated",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      setUsername("");
+      return;
+    }
+
+    toast({
+      title: "Oops.",
+      description: "There has been an error changing your username",
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+    });
   };
   return (
+    <Box>
+       <Navbar />
+   
     <form onSubmit={handleSubmit}>
       <Flex
         minH={"100vh"}
@@ -47,6 +82,8 @@ export default function UserProfileEdit() {
               placeholder="User name"
               _placeholder={{ color: "gray.500" }}
               type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </FormControl>
 
@@ -76,5 +113,6 @@ export default function UserProfileEdit() {
         </Stack>
       </Flex>
     </form>
+    </Box>
   );
 }
