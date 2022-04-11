@@ -29,3 +29,13 @@ export function useProfile(userId) {
     error: error,
   };
 }
+
+export function useBalance() {
+  const { data, error } = useQuery(`/api/balance`);
+
+  return {
+    balance: data?.balance,
+    loading: !error && !data,
+    error: error,
+  };
+}
