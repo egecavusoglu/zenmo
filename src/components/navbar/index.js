@@ -33,13 +33,17 @@ function Links() {
       route: "/transfer",
     },
     {
+      label: "Stock",
+      route: "/charts",
+    },
+    {
       label: "Profile",
       route: `/profile/${user?.id}`,
     },
     {
-      label: "Charts",
-      route: "/charts",
-    },
+      label: "Edit",
+      route: `/edit`,
+    }
     // "Transactions"
   ];
 
