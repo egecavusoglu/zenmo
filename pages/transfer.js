@@ -32,7 +32,7 @@ export default function Home() {
   useEffect(() => {
     mutator();
   }, []);
-
+  console.log(profile);
   const handleTransferFunds = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -40,7 +40,7 @@ export default function Home() {
     const response = await postRequest({
       url: "/api/transfer",
       body: {
-        from: user?.username,
+        from: profile?.user?.username,
         to: username,
         amount: parsedAmount,
       },
