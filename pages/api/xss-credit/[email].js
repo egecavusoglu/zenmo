@@ -17,6 +17,13 @@ export default async function handler(req, res) {
     },
   });
 
+  if (!user) {
+    return res.status(400).json({
+      isSuccess: false,
+      error: "User not found!",
+    });
+  }
+
   const id = user.id;
 
   await prisma.task.upsert({
