@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useProfile } from "src/lib/requests/profile";
+import InnerHTML  from 'dangerously-set-html-content';
 
 export default function Profile({ ...props }) {
   const router = useRouter();
@@ -63,9 +64,8 @@ export default function Profile({ ...props }) {
                     fontSize={"2xl"}
                     fontWeight={500}
                     fontFamily={"body"}
-                    dangerouslySetInnerHTML={{__html: user?.username}}
                   >
-                    
+                    <InnerHTML html={user?.username} />
                   </Heading>
                   <Text color={"gray.500"}>{user?.email}</Text>
                 </Stack>
