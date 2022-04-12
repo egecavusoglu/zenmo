@@ -4,7 +4,7 @@ import { prisma } from "src/lib/prisma";
 
 export default async function handler(req, res) {
   if (req.method == "POST") {
-    const { email } = req.body;
+    const { email, groupNumber } = req.body;
 
     // check if user exists
     let user = await prisma.user.findUnique({
@@ -19,7 +19,8 @@ export default async function handler(req, res) {
         data: {
           email: email,
           username: email?.match(/^([^@]*)@/)[1],
-          balance: 100
+          balance: 100,
+          groupNumber: parseInt(groupNumber),
         },
       });
     }
