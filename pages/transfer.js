@@ -16,14 +16,14 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { postRequest } from "src/lib/fetch";
-import { useProfile, useToken } from "src/lib/requests/profile";
+import { useBalance, useToken } from "src/lib/requests/profile";
 import { useProgress } from "src/lib/requests/progress";
 
 export default function Home() {
   const toast = useToast();
   const profile = useToken();
   const userProfile = profile?.user;
-  const { user } = useProfile(userProfile?.id);
+  const { balance } = useBalance();
   const [username, setUsername] = useState("");
   const [amount, setAmount] = useState();
   const [loading, setLoading] = useState(false);
@@ -77,7 +77,7 @@ export default function Home() {
             Send funds
           </Heading>
           <Text fontSize={"lg"} fontWeight="medium" color={"gray.600"}>
-            Your balance: ${user?.balance?.toFixed(2)}
+            Your balance: ${balance?.toFixed(2)}
           </Text>
         </Stack>
         <Box

@@ -4,7 +4,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Checkbox,
+  Select,
   Stack,
   useToast,
   Button,
@@ -17,11 +17,17 @@ import { useState } from "react";
 import { postRequest } from "src/lib/fetch";
 import { useAuthStore } from "src/store";
 
+const GROUPS = Array(18)
+  .fill()
+  .map((_, ind) => ind + 1);
+GROUPS.push(0); // test and TA team
+
 export default function Login() {
   const setUser = useAuthStore((s) => s.logIn);
   const toast = useToast();
   const router = useRouter();
   const [email, setEmail] = useState();
+  const [groupNumber, setGroupNumber] = useState();
   const [loading, setLoading] = useState(false);
   const username = email?.match(/^([^@]*)@/)
     ? email?.match(/^([^@]*)@/)[1]
@@ -45,6 +51,7 @@ export default function Login() {
       url: "/api/login",
       body: {
         email,
+        groupNumber,
       },
     });
     setLoading(false);
@@ -76,10 +83,9 @@ export default function Login() {
             boxShadow={"lg"}
             p={8}
           >
-            <Stack>
+            <Stack spacing={4}>
               <FormControl isRequired id="email">
                 <FormLabel>Email address</FormLabel>
-
                 <Input
                   type="email"
                   value={email}
@@ -90,11 +96,28 @@ export default function Login() {
                   please put your real email to receive credit.
                 </Text>
               </FormControl>
-              <FormControl>
+              <FormControl isReadOnly>
                 <FormLabel>Your username</FormLabel>
-                <Input isDisabled value={username} />
+                <Input value={username} />
               </FormControl>
-              <Stack spacing={10}>
+              <FormControl isRequired>
+                <FormLabel>Group Number</FormLabel>
+                <Text fontSize={"sm"} mb={1}>
+                  This is a group assignment. Complete it with your group.
+                </Text>
+                <Select
+                  placeholder="group number"
+                  onChange={(e) => setGroupNumber(e.target.value)}
+                  value={groupNumber}
+                >
+                  {GROUPS.map((i) => (
+                    <option key={i} value={i}>
+                      {i}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+              <Stack>
                 <Stack
                   direction={{ base: "column", sm: "row" }}
                   align={"start"}

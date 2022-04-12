@@ -19,6 +19,7 @@ model User {
   username String @unique
   balance Float @default(0)
   tasks Task[]
+  groupNumber Int @default(0) 
 }
 
 // Used to track which users completed which tasks for the assignment

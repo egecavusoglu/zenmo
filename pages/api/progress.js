@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   });
 
   const vulnerabilitiesLength = vulnerabilities.length;
-  const percentFinished = (vulnerabilitiesLength / 3) * 100;
+  const percentFinished = (vulnerabilitiesLength / 4) * 100;
 
   res.status(200).json({
     isSuccess: true,
