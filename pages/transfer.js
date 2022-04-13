@@ -70,7 +70,6 @@ export default function Home() {
   return (
     <Box>
       <Navbar />
-
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={12}>
         <Stack>
           <Heading color={"blue.400"} fontSize={"4xl"}>
